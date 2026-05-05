@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Espalda Check · Musicala</title>
+  <meta name="description" content="Tarjetas de seguimiento gamificado para rutina suave de espalda, postura y hombros." />
+  <meta name="theme-color" content="#8b5cf6" />
+  <meta name="color-scheme" content="light" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero__top">
+        <div>
+          <p class="eyebrow">Rutina diaria</p>
+          <h1>Espalda Check</h1>
+          <p class="hero__text">
+            Empezamos suave: 20 repeticiones por ejercicio y subimos hasta 100. Sin romperse como mueble barato, gracias.
+          </p>
+        </div>
+
+        <button class="icon-btn" id="btnReset" type="button" title="Reiniciar progreso de hoy">
+          ↺
+        </button>
+      </div>
+
+      <section class="stats-grid" aria-label="Resumen de progreso">
+        <article class="stat-card">
+          <span class="stat-card__label">Objetivo hoy</span>
+          <strong id="dailyTarget">20</strong>
+          <small>por ejercicio</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Puntos</span>
+          <strong id="totalPoints">0</strong>
+          <small>XP acumulada</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Racha</span>
+          <strong id="streak">0</strong>
+          <small>días</small>
+        </article>
+      </section>
+
+      <section class="level-card" aria-label="Nivel de jugador">
+        <div class="level-card__row">
+          <span id="levelName">Nivel 1 · Espalda despertando</span>
+          <strong id="levelProgressText">0 / 120 XP</strong>
+        </div>
+        <div class="progress progress--xp" aria-hidden="true">
+          <span id="levelProgressBar"></span>
+        </div>
+      </section>
+
+      <section class="secret-card" aria-labelledby="secretTitle">
+        <div class="secret-card__header">
+          <div>
+            <p class="eyebrow">Frase oculta</p>
+            <h2 id="secretTitle">Carta de constancia</h2>
+          </div>
+          <strong id="phraseProgressText">0 / 0 letras</strong>
+        </div>
+        <p class="secret-card__text" id="maskedPhrase"></p>
+        <div class="progress progress--phrase" aria-hidden="true">
+          <span id="phraseProgressBar"></span>
+        </div>
+        <p class="secret-card__hint" id="phraseHint"></p>
+      </section>
+    </header>
+
+    <main>
+      <section class="pain-panel" aria-labelledby="painTitle">
+        <div>
+          <p class="eyebrow">Semáforo de dolor</p>
+          <h2 id="painTitle">Antes de empezar</h2>
+          <p>
+            Marca cómo está el dolor. Si pasa de 4/10, hoy se baja el ritmo. Heroísmo postural, esa gran fábrica de lesiones absurdas, aquí no entra.
+          </p>
+        </div>
+
+        <div class="pain-controls">
+          <label>
+            Dolor antes: <strong id="painBeforeValue">0</strong>/10
+            <input id="painBefore" type="range" min="0" max="10" value="0" />
+          </label>
+          <label>
+            Dolor después: <strong id="painAfterValue">0</strong>/10
+            <input id="painAfter" type="range" min="0" max="10" value="0" />
+          </label>
+        </div>
+
+        <div class="pain-warning" id="painWarning" hidden>
+          ⚠️ Hoy modo suave: menos repeticiones, movimientos pequeños y nada de forzar cuello/hombros.
+        </div>
+      </section>
+
+      <section class="today-summary" aria-label="Resumen de la rutina de hoy">
+        <div>
+          <p class="eyebrow">Progreso de hoy</p>
+          <h2 id="todayTitle">0 de 3 ejercicios listos</h2>
+          <p id="todaySubtitle">Van 0 repeticiones. La columna, sorprendentemente, agradece la constancia.</p>
+        </div>
+        <button class="primary-btn" id="btnCompleteDay" type="button">Cerrar día y desbloquear letra</button>
+      </section>
+
+      <section class="calendar-panel" aria-labelledby="calendarTitle">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Calendario</p>
+            <h2 id="calendarTitle">Mes actual</h2>
+          </div>
+          <div class="calendar-actions" aria-label="Cambiar mes">
+            <button class="ghost-btn ghost-btn--small" id="btnPrevMonth" type="button">‹</button>
+            <button class="ghost-btn ghost-btn--small" id="btnTodayMonth" type="button">Hoy</button>
+            <button class="ghost-btn ghost-btn--small" id="btnNextMonth" type="button">›</button>
+          </div>
+        </div>
+
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="calendar-legend">
+          <span><i class="legend-dot legend-dot--letter"></i> Letra desbloqueada</span>
+          <span><i class="legend-dot legend-dot--done"></i> Rutina hecha sin letra</span>
+          <span><i class="legend-dot legend-dot--today"></i> Hoy</span>
+        </div>
+      </section>
+
+      <section class="cards-grid" id="exerciseGrid" aria-label="Ejercicios"></section>
+
+      <section class="history-panel" aria-labelledby="historyTitle">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Historial</p>
+            <h2 id="historyTitle">Últimos registros</h2>
+          </div>
+          <button class="ghost-btn" id="btnClearHistory" type="button">Borrar historial</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
